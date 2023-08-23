@@ -78,6 +78,6 @@ model Quotation {
 }
 
 enum QuotationType {
-  CHRISTIMAS
+  CHRISTMAS
   CUSTOM
 }

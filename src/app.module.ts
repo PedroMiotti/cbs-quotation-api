@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { environmentVariables } from './config/configuration';
+import { QuotationModule } from './quotation/quotation.module';
 
 @Module({
   imports: [
@@ -8,6 +9,7 @@ import { environmentVariables } from './config/configuration';
       load: [environmentVariables],
       isGlobal: true,
     }),
+    QuotationModule,
   ],
 })
 export class AppModule {}
