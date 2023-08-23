@@ -16,12 +16,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const config = new DocumentBuilder()
-    .setTitle('Knower Authentication Api')
+    .setTitle('Cbs Quotation Api')
     .setDescription(
-      'This service is responsible for authentication and authorization of Knower ecosystem.',
+      'This api handles all requests for the cbs quotation application',
     )
     .setVersion('1.0')
-    .addTag('knower')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
