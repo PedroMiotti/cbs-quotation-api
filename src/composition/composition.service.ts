@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateCompositionDto } from './dto/create-composition.dto';
 import { UpdateCompositionDto } from './dto/update-composition.dto';
 import { PrismaService } from 'src/prisma.service';
+import { CreateCompositionItemDto } from './dto/create-composition-item.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CompositionService {
@@ -12,6 +14,35 @@ export class CompositionService {
       data: createCompositionDto,
     });
 
+  }
+
+  addItem(createCompositionItemDto: CreateCompositionItemDto) {
+    return this.prisma.compositionItems.create({
+      data: createCompositionItemDto,
+    });
+  }
+
+ updateItem(productId: number, compositionId: number, quantity: number) {
+    return this.prisma.compositionItems.update({
+      where: {
+        product_id_composition_id: {
+          product_id: productId,
+          composition_id: compositionId,
+        }
+      },
+      data: { quantity },
+    });
+  }
+
+  removeItem(productId: number, compositionId: number) {
+    return this.prisma.compositionItems.delete({
+      where: {
+        product_id_composition_id: {
+          product_id: productId,
+          composition_id: compositionId,
+        }
+      },
+    });
   }
 
   findAll() {

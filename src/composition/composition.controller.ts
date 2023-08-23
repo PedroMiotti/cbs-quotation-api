@@ -3,6 +3,7 @@ import { CompositionService } from './composition.service';
 import { CreateCompositionDto } from './dto/create-composition.dto';
 import { UpdateCompositionDto } from './dto/update-composition.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateCompositionItemDto } from './dto/create-composition-item.dto';
 
 @ApiTags('Composition')
 @Controller('composition')
@@ -13,6 +14,24 @@ export class CompositionController {
   @ApiOperation({ summary: 'Create composition' })
   create(@Body() createCompositionDto: CreateCompositionDto) {
     return this.compositionService.create(createCompositionDto);
+  }
+
+  @Post('item/add')
+  @ApiOperation({ summary: 'Add item to composition' })
+  addItem(@Body() createCompositionItemDto: CreateCompositionItemDto) {
+    return this.compositionService.addItem(createCompositionItemDto);
+  }
+
+  @Patch(':id/:compositionId/item/update')
+  @ApiOperation({ summary: 'Update item to composition' })
+  updateItem(@Param('id') id: string, @Param('compositionId') compositionId: string, @Body() quantity: number) {
+    return this.compositionService.updateItem(+id, +compositionId, quantity);
+  }
+
+  @Delete(':id/:compositionId/item/remove')
+  @ApiOperation({ summary: 'Remove item from composition' })
+  removeItem(@Param('id') id: string, @Param('compositionId') compositionId: string) {
+    return this.compositionService.removeItem(+id, +compositionId);
   }
 
   @Get()
