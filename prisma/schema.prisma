@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Brand {
+  id         Int       @id @default(autoincrement())
+  name       String
+  created_at DateTime? @default(now()) @db.Date
+  updated_at DateTime? @default(now()) @db.Date
+  deleted_at DateTime? @db.Date
+  Product    Product[]
+}
+
+model Composition {
+  id               Int                @id @default(autoincrement())
+  name             String
+  margin           Decimal            @db.Decimal
+  quotation_id     Int
+  created_at       DateTime?          @default(now()) @db.Date
+  updated_at       DateTime?          @default(now()) @db.Date
+  deleted_at       DateTime?          @db.Date
+  Quotation        Quotation          @relation(fields: [quotation_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  CompositionItems CompositionItems[]
+}
+
+model CompositionItems {
+  product_id     Int
+  composition_id Int
+  quantity       Int         @default(1)
+  created_at     DateTime?   @default(now()) @db.Date
+  updated_at     DateTime?   @default(now()) @db.Date
+  deleted_at     DateTime?   @db.Date
+  Composition    Composition @relation(fields: [composition_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Product        Product     @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([product_id, composition_id])
+}
+
+model Product {
+  id               Int                @id @default(autoincrement())
+  name             String
+  weight           String
+  is_active        Boolean            @default(true)
+  brand_id         Int
+  created_at       DateTime?          @default(now()) @db.Date
+  updated_at       DateTime?          @default(now()) @db.Date
+  deleted_at       DateTime?          @db.Date
+  CompositionItems CompositionItems[]
+  Brand            Brand              @relation(fields: [brand_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ProductPrice     ProductPrice[]
+}
+
+model ProductPrice {
+  id         Int       @id @default(autoincrement())
+  product_id Int
+  price      Decimal   @db.Decimal
+  is_current Boolean   @default(false)
+  created_at DateTime? @default(now()) @db.Date
+  updated_at DateTime? @default(now()) @db.Date
+  deleted_at DateTime? @db.Date
+  Product    Product   @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Quotation {
+  id          Int           @id @default(autoincrement())
+  name        String
+  type        QuotationType
+  tag         String?
+  created_at  DateTime?     @default(now()) @db.Date
+  updated_at  DateTime?     @default(now()) @db.Date
+  deleted_at  DateTime?     @db.Date
+  Composition Composition[]
+}
+
+enum QuotationType {
+  CHRISTIMAS
+  CUSTOM
+}
