@@ -10,7 +10,7 @@ export class ProductService {
 
   async create(createProductDto: CreateProductDto) {
     const createdProduct = await this.prisma.product.create({
-      data: createProductDto,
+      data: {...createProductDto, brand_id: +createProductDto.brand_id},
       include: { ProductPrice: true, Brand: true },
     });
 
