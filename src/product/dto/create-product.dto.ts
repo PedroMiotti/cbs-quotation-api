@@ -12,4 +12,7 @@ export class CreateProductDto {
 
     @ApiProperty()
     brand_id: number;
+
+    @ApiProperty()
+    price: { price: number, is_current: boolean };
 }

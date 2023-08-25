@@ -8,11 +8,21 @@ import { CreateProductPriceDto } from './dto/create-product-price.dto';
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  create(createProductDto: CreateProductDto) {
-    return this.prisma.product.create({
+  async create(createProductDto: CreateProductDto) {
+    const createdProduct = await this.prisma.product.create({
       data: createProductDto,
       include: { ProductPrice: true, Brand: true },
     });
+
+    await this.prisma.productPrice.create({
+      data: {
+        price: createProductDto.price.price,
+        is_current: createProductDto.price.is_current,
+        product_id: createdProduct.id,
+      },
+    });
+
+    return createdProduct;
   }
 
   createPrice(createProductPriceDto: CreateProductPriceDto) {
