@@ -8,12 +8,16 @@ import { Prisma } from '@prisma/client';
 @Injectable()
 export class CompositionService {
   constructor(private prisma: PrismaService) {}
-  
+
   create(createCompositionDto: CreateCompositionDto) {
     return this.prisma.composition.create({
       data: createCompositionDto,
+      include: {
+        CompositionItems: {
+          include: { Product: { include: { ProductPrice: true } } },
+        },
+      },
     });
-
   }
 
   addItem(createCompositionItemDto: CreateCompositionItemDto) {
@@ -22,13 +26,13 @@ export class CompositionService {
     });
   }
 
- updateItem(productId: number, compositionId: number, quantity: number) {
+  updateItem(productId: number, compositionId: number, quantity: number) {
     return this.prisma.compositionItems.update({
       where: {
         product_id_composition_id: {
           product_id: productId,
           composition_id: compositionId,
-        }
+        },
       },
       data: { quantity },
     });
@@ -40,7 +44,7 @@ export class CompositionService {
         product_id_composition_id: {
           product_id: productId,
           composition_id: compositionId,
-        }
+        },
       },
     });
   }

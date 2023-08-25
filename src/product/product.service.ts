@@ -11,7 +11,7 @@ export class ProductService {
   create(createProductDto: CreateProductDto) {
     return this.prisma.product.create({
       data: createProductDto,
-      include: { ProductPrice: true },
+      include: { ProductPrice: true, Brand: true },
     });
   }
 
@@ -22,7 +22,7 @@ export class ProductService {
   }
 
   findAll() {
-    return this.prisma.product.findMany({ include: { ProductPrice: true } });
+    return this.prisma.product.findMany({ include: { ProductPrice: true, Brand: true } });
   }
 
   findOne(id: number) {
@@ -30,7 +30,7 @@ export class ProductService {
       where: {
         id: id,
       },
-      include: { ProductPrice: true },
+      include: { ProductPrice: true, Brand: true },
     });
   }
 
@@ -40,7 +40,7 @@ export class ProductService {
         id: id,
       },
       data: updateProductDto,
-      include: { ProductPrice: true },
+      include: { ProductPrice: true, Brand: true },
     });
   }
 
