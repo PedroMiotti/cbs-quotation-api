@@ -5,8 +5,5 @@ export class CreateCompositionItemDto {
     product_id: number;
 
     @ApiProperty()
-    composition_id: number
-
-    @ApiProperty()
     quantity: number;
 }

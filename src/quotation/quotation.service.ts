@@ -26,7 +26,7 @@ export class QuotationService {
         Composition: {
           include: {
             CompositionItems: {
-              include: { Product: { include: { ProductPrice: true } } },
+              include: { Product: { include: { ProductPrice: true, Brand: true } } },
             },
           },
         },

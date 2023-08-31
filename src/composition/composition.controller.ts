@@ -16,17 +16,24 @@ export class CompositionController {
     return this.compositionService.create(createCompositionDto);
   }
 
-  @Post('item/add')
+  @Post(':id/item/add')
   @ApiOperation({ summary: 'Add item to composition' })
-  addItem(@Body() createCompositionItemDto: CreateCompositionItemDto) {
-    return this.compositionService.addItem(createCompositionItemDto);
+  addItem(@Param('id') id: string, @Body() createCompositionItemDto: CreateCompositionItemDto) {
+    return this.compositionService.addItem(+id, createCompositionItemDto);
   }
 
-  @Patch(':id/:compositionId/item/update')
-  @ApiOperation({ summary: 'Update item to composition' })
-  updateItem(@Param('id') id: string, @Param('compositionId') compositionId: string, @Body() quantity: number) {
-    return this.compositionService.updateItem(+id, +compositionId, quantity);
+  @Patch(':id/item/:itemId/update')
+  @ApiOperation({ summary: 'Update item quantity in composition' })
+  updateItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() quantity: number) {
+    return this.compositionService.updateItem(+id, +itemId, quantity);
   }
+
+  @Patch(':id/item/:itemId/move')
+  @ApiOperation({ summary: 'Update item composition' })
+  moveItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() body: {new_composition_id: number}) {
+    return this.compositionService.moveItem(+id, +itemId, body.new_composition_id);
+  }
+
 
   @Delete(':id/:compositionId/item/remove')
   @ApiOperation({ summary: 'Remove item from composition' })

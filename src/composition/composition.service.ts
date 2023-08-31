@@ -14,19 +14,19 @@ export class CompositionService {
       data: createCompositionDto,
       include: {
         CompositionItems: {
-          include: { Product: { include: { ProductPrice: true } } },
+          include: { Product: { include: { ProductPrice: true, Brand: true } } },
         },
       },
     });
   }
 
-  addItem(createCompositionItemDto: CreateCompositionItemDto) {
+  addItem(compositionId: number, createCompositionItemDto: CreateCompositionItemDto) {
     return this.prisma.compositionItems.create({
-      data: createCompositionItemDto,
+      data: {composition_id: compositionId, ...createCompositionItemDto},
     });
   }
 
-  updateItem(productId: number, compositionId: number, quantity: number) {
+  updateItem(compositionId: number, productId: number, quantity: number) {
     return this.prisma.compositionItems.update({
       where: {
         product_id_composition_id: {
@@ -35,6 +35,18 @@ export class CompositionService {
         },
       },
       data: { quantity },
+    });
+  }
+
+  moveItem(compositionId: number, productId: number, newCompositionId: number) {
+    return this.prisma.compositionItems.update({
+      where: {
+        product_id_composition_id: {
+          product_id: productId,
+          composition_id: compositionId,
+        },
+      },
+      data: { composition_id: newCompositionId },
     });
   }
 
