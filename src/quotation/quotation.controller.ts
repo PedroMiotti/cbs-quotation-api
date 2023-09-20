@@ -1,13 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res  } from '@nestjs/common';
 import { QuotationService } from './quotation.service';
 import { CreateQuotationDto } from './dto/create-quotation.dto';
 import { UpdateQuotationDto } from './dto/update-quotation.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 @ApiTags('Quotation')
 @Controller('quotation')
 export class QuotationController {
   constructor(private readonly quotationService: QuotationService) {}
+
+  @Get(':id/export')
+  async exportToExcel(@Param('id') id: string, @Res() res: Response): Promise<void> {
+    const buffer = await this.quotationService.exportToExcel(+id);
+
+    res.setHeader('Content-Disposition', 'attachment; filename=export.xlsx');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.send(buffer);
+  }
 
   @Post()
   @ApiOperation({ summary: 'Create quotation' })

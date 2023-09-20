@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CompositionService } from './composition.service';
 import { CreateCompositionDto } from './dto/create-composition.dto';
 import { UpdateCompositionDto } from './dto/update-composition.dto';
@@ -18,27 +26,32 @@ export class CompositionController {
 
   @Post(':id/item/add')
   @ApiOperation({ summary: 'Add item to composition' })
-  addItem(@Param('id') id: string, @Body() createCompositionItemDto: CreateCompositionItemDto) {
+  addItem(
+    @Param('id') id: string,
+    @Body() createCompositionItemDto: CreateCompositionItemDto,
+  ) {
     return this.compositionService.addItem(+id, createCompositionItemDto);
   }
 
-  @Patch(':id/item/:itemId/update')
+  @Patch('item/:itemId/update')
   @ApiOperation({ summary: 'Update item quantity in composition' })
-  updateItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() quantity: number) {
-    return this.compositionService.updateItem(+id, +itemId, quantity);
+  updateItem(
+    @Param('itemId') itemId: string,
+    @Body() body: { quantity: number },
+  ) {
+    return this.compositionService.updateItem(+itemId, +body.quantity);
   }
 
   @Patch(':id/item/:itemId/move')
   @ApiOperation({ summary: 'Update item composition' })
-  moveItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() body: {new_composition_id: number}) {
-    return this.compositionService.moveItem(+id, +itemId, body.new_composition_id);
+  moveItem(@Param('id') id: string, @Param('itemId') itemId: string) {
+    return this.compositionService.moveItem(+id, +itemId);
   }
 
-
-  @Delete(':id/:compositionId/item/remove')
+  @Delete('item/:id/remove')
   @ApiOperation({ summary: 'Remove item from composition' })
-  removeItem(@Param('id') id: string, @Param('compositionId') compositionId: string) {
-    return this.compositionService.removeItem(+id, +compositionId);
+  removeItem(@Param('id') id: string) {
+    return this.compositionService.removeItem(+id);
   }
 
   @Get()
@@ -55,7 +68,10 @@ export class CompositionController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update composition by id' })
-  update(@Param('id') id: string, @Body() updateCompositionDto: UpdateCompositionDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCompositionDto: UpdateCompositionDto,
+  ) {
     return this.compositionService.update(+id, updateCompositionDto);
   }
 

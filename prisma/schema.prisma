@@ -29,6 +29,7 @@ model Composition {
 }
 
 model CompositionItems {
+  id           Int          @id @default(autoincrement())
   product_id     Int
   composition_id Int
   quantity       Int         @default(1)
@@ -37,8 +38,6 @@ model CompositionItems {
   deleted_at     DateTime?   @db.Date
   Composition    Composition @relation(fields: [composition_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Product        Product     @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([product_id, composition_id])
 }
 
 model Product {

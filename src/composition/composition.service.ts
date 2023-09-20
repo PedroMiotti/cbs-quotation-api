@@ -26,37 +26,28 @@ export class CompositionService {
     });
   }
 
-  updateItem(compositionId: number, productId: number, quantity: number) {
+  updateItem(itemId: number, quantity: number) {
     return this.prisma.compositionItems.update({
       where: {
-        product_id_composition_id: {
-          product_id: productId,
-          composition_id: compositionId,
-        },
+        id: itemId
       },
       data: { quantity },
     });
   }
 
-  moveItem(compositionId: number, productId: number, newCompositionId: number) {
+  moveItem(newCompositionId: number, itemId: number) {
     return this.prisma.compositionItems.update({
       where: {
-        product_id_composition_id: {
-          product_id: productId,
-          composition_id: compositionId,
-        },
+        id: itemId
       },
       data: { composition_id: newCompositionId },
     });
   }
 
-  removeItem(productId: number, compositionId: number) {
+  removeItem(itemId: number) {
     return this.prisma.compositionItems.delete({
       where: {
-        product_id_composition_id: {
-          product_id: productId,
-          composition_id: compositionId,
-        },
+        id: itemId
       },
     });
   }
