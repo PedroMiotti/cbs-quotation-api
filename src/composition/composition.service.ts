@@ -56,7 +56,7 @@ export class CompositionService {
     return this.prisma.composition.findMany();
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.prisma.composition.findUnique({
       where: {
         id: id,
@@ -73,7 +73,13 @@ export class CompositionService {
     });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    await this.prisma.compositionItems.deleteMany({
+      where: {
+        composition_id: id,
+      }
+    });
+
     return this.prisma.composition.delete({
       where: {
         id: id,

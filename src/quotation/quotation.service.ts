@@ -54,8 +54,8 @@ export class QuotationService {
       bold: true,
     };
 
-    let total = 0;
     for (const composition of data.Composition) {
+      let total = 0;
       const compositionRow = worksheet.addRow([
         `Composição #${composition.id}`,
         composition.name,
@@ -86,15 +86,21 @@ export class QuotationService {
           item.Product.name,
           item.Product.weight,
           item.quantity,
-          formatToBrlCurrency(currentPrice as number), 
+          currentPrice.toFixed(2), 
         ]);
         row.eachCell((cell) => {
           cell.border = borderStyle;
+
+          // if (cell.address.includes('D')) {
+          //   cell.numFmt = '"R$"#,##0.00';
+          // }
         });
       }
 
       const totalRow = worksheet.addRow([
         'Total: ',
+        '',
+        '',
         formatToBrlCurrency(total),
       ]);
       totalRow.getCell(1).font = boldStyle;
