@@ -31,7 +31,7 @@ jobs:
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'monitoring-proposition-api-dev'
+          app-name: 'cbs-quotation-api-dev'
           slot-name: 'production'
           publish-profile: ${{ secrets.AZURE_APP_SERVICE_PUBLISH_PROFILE_DEV }}
           package: .
